@@ -269,7 +269,7 @@ void guardar_puntaje(int puntaje_nuevo)
 		}else
 		{
 			// pide que ingrese su nombre para registrarlo
-			printf("  Ingrese su nombre: ");
+			printf("  Nuevo puntaje alto!\n  Ingrese su nombre: ");
 			scanf(" %s", nombre_nuevo);
 			printf("  Su puntaje fue: %d", puntaje_nuevo);
 			fprintf(fpuntaje, "%s %d\n", nombre_nuevo, puntaje_nuevo);
@@ -289,7 +289,7 @@ void guardar_puntaje(int puntaje_nuevo)
 			{
 				if(0 == puntaje_agregado)
 				{
-					printf("  Ingrese su nombre: ");
+					printf("  Nuevo puntaje alto!\n  Ingrese su nombre: ");
 					scanf(" %s", nombre_nuevo);
 					printf("  Su puntaje fue: %d", puntaje_nuevo);
 					push(&head, nombre_nuevo, puntaje_nuevo);
@@ -302,9 +302,9 @@ void guardar_puntaje(int puntaje_nuevo)
 		}
 		fclose(fpuntaje);
 		
-		if(puntaje_agregado == 0 && ranking < 10)
+		if(puntaje_agregado == 0 && ranking < 10) //Si no esta llena la lista de puntajes
 		{
-			printf("  Ingrese su nombre: ");
+			printf("  Nuevo puntaje alto!\n  Ingrese su nombre: ");
 			scanf(" %s", nombre_nuevo);
 			printf("  Su puntaje fue: %d", puntaje_nuevo);
 			push(&head, nombre_nuevo, puntaje_nuevo);
@@ -315,9 +315,10 @@ void guardar_puntaje(int puntaje_nuevo)
 		// en caso de que haya sido mayor a alguno de los puntajes ya almacenados
 		if(1 == puntaje_agregado)
 		{
-			if(ranking >= 10) //elimina el menor puntaje
+			if(ranking > 10) //elimina el menor puntaje
 			{
 				pop(&head);
+				ranking--;
 			}
 			// lo guarda
 			fpuntaje = fopen(PUNTAJES, "w");
@@ -328,12 +329,10 @@ void guardar_puntaje(int puntaje_nuevo)
 			
 			
 			struct node *temp = head;
-			while (NULL != temp->siguiente)
-			{
+			for(int i=0; i<ranking; i++){
 				fprintf(fpuntaje, "%s %d\n", temp->nombre, temp->puntaje);
 				temp = temp->siguiente;
 			}
-
 			
 			fclose(fpuntaje);
 		}
@@ -358,8 +357,9 @@ void ver_puntajes()
 		while (!feof(fpuntaje))
 		{
 			fscanf(fpuntaje, "%s %d\n", nombre, &puntaje);
-			printf("%s: %d puntos \n", nombre, puntaje);
+			//printf("%s: %d puntos \n", nombre, puntaje);
 		}
+		
 		fclose(fpuntaje);
 	}
 }
